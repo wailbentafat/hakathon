@@ -9,7 +9,7 @@ import { faLock } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import InputGroupText from 'react-bootstrap/InputGroupText'
-import { signIn } from 'next-auth/react'
+import axios from 'axios'
 import useDictionary from '@/locales/dictionary-hook'
 
 export default function Register() {
@@ -18,37 +18,24 @@ export default function Register() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  const register = async () => {
+  const register = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     setSubmitting(true)
 
+    const formData = new FormData(event.currentTarget)
+
     try {
-      const res = await signIn('credentials', {
-        username: 'Username',
-        password: 'Password',
-        redirect: false,
-        callbackUrl: '/',
-      })
-
-      if (!res) {
-        setError('Register failed')
-        return
+      const body = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password'),
       }
 
-      const { ok, url, error: err } = res
+      const res = await axios.post('http://localhost:8080/signup', body)
 
-      if (!ok) {
-        if (err) {
-          setError(err)
-          return
-        }
+      // Handle successful registration, e.g., redirect to login page
+      router.push('/login') // Redirect to the login page after successful registration
 
-        setError('Register failed')
-        return
-      }
-
-      if (url) {
-        router.push(url)
-      }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
