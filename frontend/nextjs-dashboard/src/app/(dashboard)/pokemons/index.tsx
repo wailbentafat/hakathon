@@ -69,7 +69,7 @@ export default function Index(props: Props) {
           </Button>
         </div>
         <Pagination meta={pokemonResource.meta} />
-        <PokemonList pokemons={pokemonResource.data} />
+        <PokemonList />
         <Pagination meta={pokemonResource.meta} />
       </Card.Body>
     </Card>
