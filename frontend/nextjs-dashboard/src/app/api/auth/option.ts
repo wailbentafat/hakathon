@@ -1,49 +1,56 @@
-import { NextAuthOptions, User } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { getDictionary } from '@/locales/dictionary'
+import axios from 'axios';
+import { NextAuthOptions, User } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { getDictionary } from '@/locales/dictionary';
+
+
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ user, token }) {
       if (user) {
-        return { ...token, user: { ...user as User } }
+        // If a user object is returned, save the token to the token object
+        token.accessToken = user.accessToken;
+        return { ...token, user: { ...user as User } };
       }
-
-      return token
+      return token;
     },
-    async session({ session, token }) {
-      return { ...session, user: token.user }
-    },
-  },
+   
   providers: [
     CredentialsProvider({
       credentials: {
-        username: { type: 'string' },
+        username: { type: 'text' },
         password: { type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials) {
-          return null
+          return null;
         }
-        const { username, password } = credentials
+        const { username, password } = credentials;
 
-        // Replace with real authentication here
-        const ok = username === 'Username' && password === 'Password'
+        try {
+          const response = await axios.post('http://your-backend-url/api/login', {
+             email :username,
+            password,
+          });
 
-        const dict = await getDictionary()
+          // Assuming the backend responds with a structure like:
+          // { success: true, token: 'your_token', user: { ... } }
+          if (response.data.success) {
+            const token = response.data.token; // The token from your response
 
-        if (!ok) {
-          throw new Error(dict.login.message.auth_failed)
-        }
-
-        return {
-          id: 1,
-          name: 'Name',
-          username: 'Username',
-          email: 'user@email.com',
-          avatar: '/assets/img/avatars/8.jpg',
+            return {
+              accessToken: token, // Include the token for further use
+            };
+          } else {
+            const dict = await getDictionary();
+            throw new Error(dict.login.message.auth_failed);
+          }
+        } catch (error) {
+          const dict = await getDictionary();
+          throw new Error(dict.login.message.auth_failed || error.message);
         }
       },
     }),
   ],
-}
+};
