@@ -1,23 +1,34 @@
-import {
-  Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Table,
-} from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Pokemon } from '@/models/pokemon'
+"use client"
+
+import { useEffect, useState } from 'react'
+import { Table } from 'react-bootstrap'
 import THSort from '@/components/TableSort/THSort'
-import PokemonTypeLabel from '@/components/Page/Pokemon/PokemonTypeLabel'
-import useDictionary from '@/locales/dictionary-hook'
+import axios from 'axios'
 
-type Props = {
-  pokemons: Pokemon[];
-}
+import Cookies from 'js-cookie'
+function PokemonList() {
 
-export default function PokemonList(props: Props) {
-  const { pokemons } = props
-  const dict = useDictionary()
+  const token = Cookies.get('token')
+  const [data, setData] = useState([])
+  
+  useEffect(() => {
+    const fetchingData =  () => {
+      try {
+        axios.get("http://localhost:8080/get_complain",{
+          headers:{Authorization:`Bearer ${token} `}
+        }).then((res)=>{
+          console.log(res)
+        }).catch((err)=>{
+          console.log(err)
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchingData()
+    
+  },[])
+
 
   return (
     <Table responsive bordered hover>
@@ -27,61 +38,48 @@ export default function PokemonList(props: Props) {
             <THSort name="id">id</THSort>
           </th>
           <th>
-            <THSort name="name">{dict.pokemons.attribute.name}</THSort>
+            <THSort name="name">Name</THSort>
           </th>
-          <th>{dict.pokemons.attribute.type}</th>
-          <th className="text-center">{dict.pokemons.attribute.egg_group}</th>
+          <th>Phone number</th>
+          <th className="text-center">Bank card</th>
+          <th className="text-end">Location</th>
           <th className="text-end">
-            <THSort name="hp">{dict.pokemons.attribute.hp}</THSort>
+            <THSort name="category">Category</THSort>
           </th>
+          <th className="text-end">Description</th>
           <th className="text-end">
-            <THSort name="attack">{dict.pokemons.attribute.attack}</THSort>
-          </th>
-          <th className="text-end">
-            <THSort name="special_defense">
-              {dict.pokemons.attribute.speed}
-            </THSort>
+            <THSort name="satisfied">Satisfied</THSort>
           </th>
           <th className="text-end">
-            <THSort name="defense">{dict.pokemons.attribute.defense}</THSort>
+            <THSort name="staff_id">Staff ID</THSort>
           </th>
           <th className="text-end">
-            <THSort name="special_attack">
-              {dict.pokemons.attribute.sp_attack}
-            </THSort>
-          </th>
-          <th className="text-end">
-            <THSort name="special_defense">
-              {dict.pokemons.attribute.sp_defense}
-            </THSort>
+            <THSort name="date">Date</THSort>
           </th>
           <th aria-label="Action" />
         </tr>
       </thead>
       <tbody>
-        {pokemons.map((pokemon) => (
-          <tr key={pokemon.id}>
-            <td>{pokemon.id}</td>
-
-            <td>{pokemon.name}</td>
-            <td>
-              {pokemon.types.map((type) => (
-                <span key={type.id} className="me-2">
-                  <PokemonTypeLabel type={type} />
-                </span>
-              ))}
+        {/* {data.map((item) => (
+          <tr key={item.id}>
+            <td>{item.id}</td>
+            <td>{item.name}</td>
+            <td>{item.phone}</td>
+            <td className="text-center">{item.bankCard}</td>
+            <td className="text-end">{item.location}</td>
+            <td className="text-end">{item.category}</td>
+            <td className="text-end">{item.description}</td>
+            <td className="text-end">{item.satisfied}</td>
+            <td className="text-end">{item.staffId}</td>
+            <td className="text-end">{item.date}</td>
+            <td aria-label="Action">
             </td>
-            <td className="text-center" style={{ whiteSpace: 'pre' }}>
-              {pokemon.egg_groups.map((eggGroup) => eggGroup.name).join('\n')}
-            </td>
-            <td className="text-end">{pokemon.hp}</td>
-            <td className="text-end">{pokemon.attack}</td>
-            <td className="text-end">{pokemon.defense}</td>
-            <td className="text-end">{pokemon.special_attack}</td>
-            <td className="text-end">{pokemon.special_defense}</td>
           </tr>
-        ))}
+        ))} */}
       </tbody>
     </Table>
   )
 }
+
+
+export default PokemonList
