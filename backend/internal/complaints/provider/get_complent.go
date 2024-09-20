@@ -1,13 +1,17 @@
 package complaints
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
-
+var db *sql.DB
+func SetDB(database *sql.DB) {
+	db = database
+}
 func Get_complent(c *gin.Context) {
 	limitStr := c.Query("limit")
 	offsetStr := c.Query("offset")

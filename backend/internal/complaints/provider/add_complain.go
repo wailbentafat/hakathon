@@ -8,11 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var db *sql.DB
-
-func SetDB(database *sql.DB) {
-	db = database
-}
 
 func Add_complain(c *gin.Context) {
 	type complain struct {
@@ -25,7 +20,7 @@ func Add_complain(c *gin.Context) {
 		Description string `json:"description"`
 		Satisfied   bool   `json:"satisfied"`
 	}
-     c.get("email")
+
 	var complainval complain
 	if err := c.BindJSON(&complainval); err != nil {
 		log.Printf("Failed to bind JSON: %v\n", err)
@@ -33,8 +28,28 @@ func Add_complain(c *gin.Context) {
 		return
 	}
 
+	 email, exists := c.Get("email"); if !exists {
+		c.JSON(http.StatusBadRequest,gin.H{"err":"no email seted"})
+		 log.Printf("hey")
+	 }
+	 log.Printf("email")
+     log.Print(email)
+
+	 query := `SELECT id FROM staff WHERE email = ?`
+
+	var staffID int
+
+	err := db.QueryRow(query, email).Scan(&staffID)
+	log.Print(err)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest,gin.H{"err":"probleme getting"})
+		log.Printf("jjjjjj")
+		return}
+
+
 	// Validate required fields
-	if complainval.StuffID == 0 || complainval.BankCard == "" ||
+	if complainval.BankCard == "" ||
 		complainval.Category == "" || complainval.Name == "" ||
 		complainval.Location == "" || complainval.PhoneNumber == "" ||
 		complainval.Description == "" {
@@ -43,10 +58,9 @@ func Add_complain(c *gin.Context) {
 		return
 	}
 
-	// Check if the category exists
-	query := `SELECT name FROM categories WHERE name = ?`
+	query = `SELECT name FROM categories WHERE name = ?`
 	var categoryExists string
-	err := db.QueryRow(query, complainval.Category).Scan(&categoryExists)
+	err = db.QueryRow(query, complainval.Category).Scan(&categoryExists)
 
 	if err == sql.ErrNoRows {
 		// If category does not exist, insert it

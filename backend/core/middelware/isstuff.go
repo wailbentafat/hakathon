@@ -44,11 +44,6 @@ func STUFFMiddleware(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		if id == 0 {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
-			return
-		}
 		
 		c.Set("email", claims)
 		

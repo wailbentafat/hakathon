@@ -1,0 +1,206 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample API for user authentication, complaints, and management.",
+        "version": "1.0.0",
+        "title": "Sample API",
+        "contact": {
+            "name": "Your Name",
+            "url": "http://yourwebsite.com",
+            "email": "your.email@example.com"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Logs in a user",
+                "description": "Logs in a user with the provided credentials.",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Username for login",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password for login",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged in",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/addadmin": {
+            "post": {
+                "summary": "Adds an admin user",
+                "description": "Creates a new admin user with the provided details.",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Username for admin",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password for admin",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin user created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Error creating admin user"
+                    }
+                }
+            }
+        },
+        "/get_complain": {
+            "get": {
+                "summary": "Get a complaint",
+                "description": "Retrieve a complaint.",
+                "responses": {
+                    "200": {
+                        "description": "Complaint details",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "description": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Complaint not found"
+                    }
+                }
+            }
+        },
+        "/add_complain": {
+            "post": {
+                "summary": "Add a new complaint",
+                "description": "Create a new complaint.",
+                "parameters": [
+                    {
+                        "name": "description",
+                        "in": "body",
+                        "description": "Description of the complaint",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Complaint added successfully"
+                    },
+                    "400": {
+                        "description": "Error adding complaint"
+                    }
+                }
+            }
+        },
+        "/stuff": {
+            "get": {
+                "summary": "Get information about stuff",
+                "description": "Retrieve information about stuff.",
+                "responses": {
+                    "200": {
+                        "description": "Stuff details",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/addstuff": {
+            "post": {
+                "summary": "Add new stuff",
+                "description": "Create a new stuff entry.",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "body",
+                        "description": "Name of the stuff",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stuff added successfully"
+                    },
+                    "400": {
+                        "description": "Error adding stuff"
+                    }
+                }
+            }
+        },
+        "/deletestuff/{id}": {
+            "delete": {
+                "summary": "Delete stuff",
+                "description": "Delete a specific stuff entry by ID.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the stuff to delete",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stuff deleted successfully"
+                    },
+                    "404": {
+                        "description": "Stuff not found"
+                    }
+                }
+            }
+        }
+    }
+}
