@@ -1,0 +1,75 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "next/core-web-vitals"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  // https://github.com/iamturns/eslint-config-airbnb-typescript/issues/239
+  // https://www.npmjs.com/package/eslint-plugin-import
+  "settings": {
+    "import/resolver": {
+      "typescript": true
+    }
+  },
+  "rules": {
+    "import/prefer-default-export": 0,
+    // https://stackoverflow.com/questions/69928061/struggling-with-typescript-react-eslint-and-simple-arrow-functions-components
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": [
+          "function-declaration",
+          "arrow-function"
+        ]
+      }
+    ],
+    // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/anchor-is-valid.md#case-i-use-nextjs-and-im-getting-this-error-inside-of-links
+    "jsx-a11y/anchor-is-valid": 0,
+    // airbnb config configures stricter rules, change assert to "either".
+    // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/718
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "assert": "either"
+      }
+    ],
+    // Since we do not use prop-types
+    "react/require-default-props": 0,
+    // Use semicolon as member delimiter for interfaces and type
+    "@typescript-eslint/member-delimiter-style": 2,
+    "@typescript-eslint/semi": 0,
+    "react/jsx-props-no-spreading": [
+      2,
+      {
+        "exceptions": [
+          "input",
+          "textarea",
+          "select",
+          "Form.Control",
+          "Form.Check",
+          "Form.Check.Input",
+          "Form.Select",
+          "Form.Switch"
+        ]
+      }
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "semi": [
+      2,
+      "never"
+    ],
+    "eslint-comments/no-unused-disable": 2
+  }
+}
