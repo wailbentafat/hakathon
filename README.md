@@ -7,3 +7,8 @@ using django you can keep track of user calls by client name, email, phone... th
 # load balencing
 
 using established hardware and a proven algorithm
+
+# vodeps
+
+https://github.com/user-attachments/assets/847c28df-31a0-4aa2-b8c9-21ef1ac9d1c9
+
