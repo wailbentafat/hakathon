@@ -33,6 +33,7 @@ func  AuthRoutes(db *sql.DB, r *gin.Engine) {
 	// @Success 200 {string} string "Admin user created successfully"
 	// @Router /addadmin [post]
 	r.POST("/addadmin", proviauth.CreateAdmin)
+	r.POST("/register",proviauth.Register)
 
 	// This endpoint is used to serve the Swagger UI.
 	// @Summary Serves the Swagger UI
